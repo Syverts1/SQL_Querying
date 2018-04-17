@@ -161,3 +161,37 @@ left join film as f on fc.film_id=f.film_id
 where cat.name="Family";
 
 #7e. Display the most frequently rented movies in descending order.
+select i.film_id, f.title, count(r.rental_id) as num_rentals from rental as r
+left join inventory as i on r.inventory_id=i.inventory_id
+left join film as f on i.film_id=f.film_id
+group by i.film_id
+order by count(r.rental_id);
+
+#7f. Write a query to display how much business, in dollars, each store brought in.
+select * from sales_by_store;
+
+#7g. Write a query to display for each store its store ID, city, and country.
+select s.store_id,city.city,country.country from store as s
+left join address as a on s.address_id=a.address_id
+left join city on a.city_id=city.city_id
+left join country on country.country_id=city.country_id;
+
+/*7h. List the top five genres in gross revenue in descending order.
+ (Hint: you may need to use the following tables: category, film_category, inventory, payment, and rental.)*/
+select * from sales_by_film_category as s
+order by s.total_sales asc
+limit 5;
+
+/*8a. In your new role as an executive, you would like to have an easy way of viewing the Top five genres by gross revenue.
+ Use the solution from the problem above to create a view. 
+If you haven't solved 7h, you can substitute another query to create a view.*/
+create view top_5_genres as
+select * from sales_by_film_category as s
+order by s.total_sales asc
+limit 5;
+
+#8b. How would you display the view that you created in 8a?
+select * from top_5_genres;
+
+#8c. You find that you no longer need the view top_five_genres. Write a query to delete it.
+drop view top_5_genres;
